@@ -16,7 +16,7 @@ class PageSortTest {
     @BeforeEach
     void setUp() {
         pageSort = new PageSort();
-        unsortedList = createUnsortedList();
+        unsortedList = createUnsortedList(1000);
     }
 
     @Test
@@ -49,10 +49,10 @@ class PageSortTest {
         Assertions.assertArrayEquals(actual, expected);
     }
 
-    private List<Integer> createUnsortedList() {
-        List<Integer> unsortedList = new ArrayList<>(1000);
+    private List<Integer> createUnsortedList(int size) {
+        List<Integer> unsortedList = new ArrayList<>(size);
         for (Integer index : unsortedList) {
-            unsortedList.add((int) (Math.random() * 100000));
+            unsortedList.add((int) (Math.random() * size * 100));
         }
         return unsortedList;
     }
