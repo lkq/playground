@@ -2,6 +2,8 @@ package com.github.lkq;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -11,21 +13,24 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ElementFinderTest {
+    private static Logger logger = LoggerFactory.getLogger(ElementFinderTest.class);
 
     private final Random random = new Random();
-    private final int SIZE = 10;
+    private final int SIZE = 1000000;
     private ElementFinder elementFinder;
 
     @BeforeEach
     void setUp() {
-        random.setSeed(System.currentTimeMillis());
+        random.setSeed(System.nanoTime());
         this.elementFinder = new ElementFinder();
     }
 
     @Test
     void canFindTheLargestElement() {
         int[] data = createRandomArray(SIZE);
+        long startTime = System.currentTimeMillis();
         int largest = elementFinder.largest(data, 0);
+        logger.info("found largest element in {} ms", System.currentTimeMillis() - startTime);
         for (int value : data) {
             assertTrue(value <= largest);
         }
@@ -36,26 +41,11 @@ class ElementFinderTest {
         int[] data = createRandomArray(SIZE);
         int nth = random.nextInt(SIZE);
         int nthValue = elementFinder.largest(data, nth);
+
+        long startTime = System.currentTimeMillis();
         Arrays.sort(data);
+        logger.info("Arrays.sort completed in {} ms", System.currentTimeMillis() - startTime);
         assertThat(nthValue, is(data[data.length - nth - 1]));
-    }
-
-    @Test
-    void canFindTheSmallestElement() {
-        int[] data = createRandomArray(1000);
-        int smallest = elementFinder.findSmallest(data, 0);
-        for (int value : data) {
-            assertTrue(value >= smallest);
-        }
-    }
-
-    @Test
-    void canFindSmallestNthElement() {
-        int[] data = createRandomArray(SIZE);
-        int nth = random.nextInt(SIZE);
-        int nthValue = elementFinder.findSmallest(data, nth);
-        Arrays.sort(data);
-        assertThat(nthValue, is(data[SIZE - nth - 1]));
     }
 
     private int[] createRandomArray(int size) {

@@ -7,10 +7,11 @@ import java.util.Arrays;
 
 public class ElementFinder {
     private static Logger logger = LoggerFactory.getLogger(ElementFinder.class);
+
     static class CountResult {
-        public int larger;
-        public int smaller;
-        public int equals;
+        int larger;
+        int smaller;
+        int equals;
 
         @Override
         public String toString() {
@@ -24,26 +25,36 @@ public class ElementFinder {
 
     public int largest(int[] data, int nth) {
 
-        logger.info("getting {}th from {}", nth, formatArray(data, data.length));
+        if (logger.isDebugEnabled()) {
+            logger.debug("getting {}th from {}", nth, formatArray(data, data.length));
+        }
+
+        long startTime = System.currentTimeMillis();
         int[] sortData = Arrays.copyOf(data, data.length);
         int length = data.length;
         int pivot;
+
         CountResult counts;
+
+        int result;
         while (true) {
             pivot = findPivot(sortData, length);
             counts = countElements(pivot, sortData, length);
-            logger.info("pivot: {}, {}, length: {}, nth: {}, array: {}", pivot, counts, length, nth, formatArray(sortData, length));
+            if (logger.isDebugEnabled()) {
+                logger.debug("pivot: {}, {}, length: {}, nth: {}, array: {}", pivot, counts, length, nth, formatArray(sortData, length));
+            }
             if (nth < counts.larger) {
                 length = partition(pivot, sortData, length, true);
             } else if (nth < (counts.larger + counts.equals)){
-                logger.info("found {}", pivot);
-                return pivot;
+                result = pivot;
+                break;
             } else {
                 nth -= (counts.larger + counts.equals);
                 length = partition(pivot, sortData, length, false);
             }
-
         }
+        logger.info("found {} in {} ms", result, System.currentTimeMillis() - startTime);
+        return result;
     }
 
     private String formatArray(int[] array, int length) {
@@ -84,14 +95,8 @@ public class ElementFinder {
     }
 
     private int findPivot(int[] sortList, int length) {
+        // TODO: find a better way to get pivot value
         return sortList[0];
     }
 
-    public int findLargest(int[] data, int nth) {
-        return 0;
-    }
-
-    public int findSmallest(int[] data, int nth) {
-        return data[nth];
-    }
 }
