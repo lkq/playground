@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * given an unsorted array, get the sorted sub array begin from the nth element with the required size
- * the algorithm contains 2 parts:
+ * the algorithm contains 3 parts:
  * 1. find out the nth largest element.
  *      use a partition by pivot algorithm
  *      complexity: O(log(n)) - O(n), depending on the pivot selection algorithm
@@ -27,6 +27,7 @@ public class SortedSubArray {
         long start = System.currentTimeMillis();
         SortedQueue sortedData = new SortedQueue(size);
 
+        // get the nth largest element
         int largest = elementFinder.largest(data, nth);
         for (int value : data) {
             if (value <= largest) {
