@@ -32,6 +32,7 @@ public class ElementFinder {
         long startTime = System.currentTimeMillis();
         int[] sortData = Arrays.copyOf(data, data.length);
         int length = data.length;
+        int index = nth;
         int pivot;
 
         CountResult counts;
@@ -41,19 +42,19 @@ public class ElementFinder {
             pivot = findPivot(sortData, length);
             counts = countElements(pivot, sortData, length);
             if (logger.isDebugEnabled()) {
-                logger.debug("pivot: {}, {}, length: {}, nth: {}, array: {}", pivot, counts, length, nth, formatArray(sortData, length));
+                logger.debug("pivot: {}, {}, length: {}, index: {}, array: {}", pivot, counts, length, index, formatArray(sortData, length));
             }
-            if (nth < counts.larger) {
+            if (index < counts.larger) {
                 length = partition(pivot, sortData, length, true);
-            } else if (nth < (counts.larger + counts.equals)){
+            } else if (index < (counts.larger + counts.equals)){
                 result = pivot;
                 break;
             } else {
-                nth -= (counts.larger + counts.equals);
+                index -= (counts.larger + counts.equals);
                 length = partition(pivot, sortData, length, false);
             }
         }
-        logger.info("found {} in {} ms", result, System.currentTimeMillis() - startTime);
+        logger.info("found {}th value: {} in {} ms", nth, result, System.currentTimeMillis() - startTime);
         return result;
     }
 
