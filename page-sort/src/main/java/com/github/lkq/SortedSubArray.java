@@ -1,5 +1,8 @@
 package com.github.lkq;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * given an unsorted array, get the sorted sub array begin from the nth element with the required size
  * the algorithm contains 2 parts:
@@ -17,9 +20,11 @@ package com.github.lkq;
  */
 public class SortedSubArray {
 
+    private static Logger logger = LoggerFactory.getLogger(SortedSubArray.class);
     private ElementFinder elementFinder = new ElementFinder();
 
     public int[] sort(int[] data, int nth, int size) {
+        long start = System.currentTimeMillis();
         SortedQueue sortedData = new SortedQueue(size);
 
         int largest = elementFinder.largest(data, nth);
@@ -29,6 +34,7 @@ public class SortedSubArray {
             }
         }
 
+        logger.info("sorted {} elements out of {} in {} ms", size, data.length, System.currentTimeMillis() - start);
         return sortedData.get();
     }
 

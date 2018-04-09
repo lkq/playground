@@ -12,10 +12,10 @@ import java.util.Random;
 class SortedSubArrayTest {
     private static Logger logger = LoggerFactory.getLogger(SortedSubArrayTest.class);
 
-    public static final int SIZE = 100;
+    public static final int SIZE = 1000000;
     private final Random random = new Random();
     private SortedSubArray sortedSubArray;
-    public static final int PAGE_SIZE = 10;
+    public static final int PAGE_SIZE = 100;
 
     @BeforeEach
     void setUp() {
@@ -25,11 +25,21 @@ class SortedSubArrayTest {
 
     @Test
     void canSortAllPageRange() {
-        int pages = (SIZE + PAGE_SIZE - 1) / PAGE_SIZE;
+        int pages = 10;
         for (int i = 0; i < pages; i++) {
             logger.info("testing page {}", i);
-            runTest(createRandomArray(SIZE), i * PAGE_SIZE, PAGE_SIZE);
+            runTest(createRandomArray(PAGE_SIZE * pages), i * PAGE_SIZE, PAGE_SIZE);
         }
+    }
+
+    @Test
+    void canSortFirstWholePage() {
+        runTest(createRandomArray(SIZE), 0, PAGE_SIZE);
+    }
+
+    @Test
+    void canSortFirstHalfPage() {
+        runTest(createRandomArray(SIZE), 0, PAGE_SIZE * 2);
     }
 
     @Test
@@ -40,11 +50,6 @@ class SortedSubArrayTest {
     @Test
     void canSortLastHalfPage() {
         runTest(createRandomArray(SIZE), SIZE - PAGE_SIZE / 2, PAGE_SIZE);
-    }
-
-    @Test
-    void canSortHalfPage() {
-        runTest(createRandomArray(SIZE), 0, PAGE_SIZE * 2);
     }
 
     private void runTest(int[] data, int startIndex, int size) {
