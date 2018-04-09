@@ -2,11 +2,11 @@ package com.github.lkq;
 
 import java.util.Arrays;
 
-public class SortList {
+public class SortedQueue {
     private int capacity;
     private int[] data;
 
-    SortList(int capacity) {
+    SortedQueue(int capacity) {
         this.data = new int[capacity];
         this.capacity = capacity;
     }

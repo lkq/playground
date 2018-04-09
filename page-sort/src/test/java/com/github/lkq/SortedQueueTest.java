@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Random;
 
-class SortListTest {
+class SortedQueueTest {
     public static final int CAPACITY = 100;
-    SortList sortList;
+    SortedQueue sortedQueue;
     Random random;
 
     @BeforeEach
@@ -21,16 +21,16 @@ class SortListTest {
     @Test
     void canInsertAndSort() {
         int[] expected = new int[CAPACITY];
-        sortList = new SortList(CAPACITY);
+        sortedQueue = new SortedQueue(CAPACITY);
         for (int i = 0; i < CAPACITY; i++) {
             int value = random.nextInt(CAPACITY * 100);
             expected[i] = value;
-            sortList.insert(value);
+            sortedQueue.insert(value);
         }
 
         Arrays.sort(expected);
 
-        Assertions.assertArrayEquals(expected, sortList.get());
+        Assertions.assertArrayEquals(expected, sortedQueue.get());
 
     }
 }
