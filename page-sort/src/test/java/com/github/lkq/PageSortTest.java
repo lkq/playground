@@ -4,56 +4,54 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Random;
 
 class PageSortTest {
 
+    public static final int SIZE = 1000;
+    private final Random random = new Random();
     private PageSort pageSort;
-    private List<Integer> unsortedList;
+    public static final int PAGE_SIZE = 100;
 
     @BeforeEach
     void setUp() {
+        random.setSeed(System.nanoTime());
         pageSort = new PageSort();
-        unsortedList = createUnsortedList(1000);
     }
 
     @Test
-    void canSortFirstPage() {
-        runTest(0, 99);
+    void canSortAllPageRange() {
+        int pages = (SIZE + PAGE_SIZE - 1) / PAGE_SIZE;
+        for (int i = 0; i < pages; i++) {
+            runTest(createRandomArray(SIZE), i * PAGE_SIZE, (i + 1) * PAGE_SIZE);
+        }
     }
 
     @Test
-    void canSortPageInTheMiddle() {
-        runTest(500, 599);
-    }
-
-    @Test
-    void canSortLastPage() {
-        runTest(900, 999);
+    void canSortLastWholePage() {
+        runTest(createRandomArray(SIZE), SIZE - PAGE_SIZE, SIZE);
     }
 
     @Test
     void canSortLastHalfPage() {
-        runTest(900, 1099);
+        runTest(createRandomArray(SIZE), SIZE - PAGE_SIZE / 2, SIZE + PAGE_SIZE / 2);
     }
 
-    private void runTest(int startIndex, int endIndex) {
-        ArrayList<Integer> sortedList = new ArrayList<>(unsortedList);
-        sortedList.sort(Comparator.naturalOrder());
-        List<Integer> sortedData = pageSort.sort(unsortedList, startIndex, endIndex);
+    private void runTest(int[] data, int startIndex, int endIndex) {
 
-        Integer[] expected = sortedList.subList(startIndex, endIndex).toArray(new Integer[0]);
-        Integer[] actual = sortedData.toArray(new Integer[0]);
-        Assertions.assertArrayEquals(actual, expected);
+        int[] sortedData = pageSort.sort(data, startIndex, endIndex);
+
+        Arrays.sort(data);
+        int[] expected = Arrays.copyOfRange(data, startIndex, endIndex);
+        Assertions.assertArrayEquals(sortedData, expected);
     }
 
-    private List<Integer> createUnsortedList(int size) {
-        List<Integer> unsortedList = new ArrayList<>(size);
-        for (Integer index : unsortedList) {
-            unsortedList.add((int) (Math.random() * size * 100));
+    private int[] createRandomArray(int size) {
+        int[] array = new int[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = random.nextInt(size * 100);
         }
-        return unsortedList;
+        return array;
     }
 }

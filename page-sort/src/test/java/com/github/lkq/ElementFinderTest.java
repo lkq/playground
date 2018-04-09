@@ -16,7 +16,7 @@ class ElementFinderTest {
     private static Logger logger = LoggerFactory.getLogger(ElementFinderTest.class);
 
     private final Random random = new Random();
-    private final int SIZE = 1000000;
+    private final int SIZE = 10000000;
     private ElementFinder elementFinder;
 
     @BeforeEach
